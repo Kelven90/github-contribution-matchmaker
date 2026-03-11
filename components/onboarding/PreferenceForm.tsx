@@ -10,8 +10,8 @@ export default function PreferenceForm() {
   const router = useRouter();
 
   const [skillLevel, setSkillLevel] = useState("beginner");
-  const [preferredLanguages, setPreferredLanguages] = useState<string[]>(["TypeScript"]);
-  const [preferredAreas, setPreferredAreas] = useState<string[]>(["frontend"]);
+  const [preferredLanguages, setPreferredLanguages] = useState<string[]>([]);
+  const [preferredAreas, setPreferredAreas] = useState<string[]>([]);
   const [customLanguage, setCustomLanguage] = useState("");
   const [customArea, setCustomArea] = useState("");
   const [preferredIssueSize, setPreferredIssueSize] = useState("small");
