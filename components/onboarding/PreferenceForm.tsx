@@ -123,17 +123,29 @@ export default function PreferenceForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 rounded-lg border p-6">
-      <div className="flex items-center justify-between gap-3 rounded-md border bg-gray-50 px-3 py-2">
-        <p className="text-sm text-gray-700">Want to understand how matching and scoring work?</p>
-        <button type="button" onClick={() => setIsHelpOpen(true)} className="rounded border px-3 py-1.5 text-sm">
-          How Matching Works
-        </button>
+    <form onSubmit={handleSubmit} className="space-y-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-xl border border-indigo-200 bg-gradient-to-r from-indigo-50 via-sky-50 to-purple-50 p-4 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-indigo-700">Quick Guide</p>
+            <p className="mt-1 text-sm font-semibold text-gray-900">Want to understand how matching and scoring work?</p>
+            <p className="mt-1 text-xs text-gray-600">
+              See how preferences, scoring signals, and ranking combine before you save your setup.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsHelpOpen(true)}
+            className="shrink-0 rounded-md border border-indigo-300 bg-white px-3 py-1.5 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-50"
+          >
+            How Matching Works
+          </button>
+        </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2 rounded-lg border border-slate-200 bg-slate-50/80 p-4">
         <div className="flex items-center gap-2">
-          <label className="block font-medium">Skill Level</label>
+          <label className="block text-sm font-semibold uppercase tracking-wide text-slate-700">Skill Level</label>
           <button
             type="button"
             onClick={() => setIsSkillInfoOpen(true)}
@@ -147,25 +159,32 @@ export default function PreferenceForm() {
         <select
           value={skillLevel}
           onChange={(e) => setSkillLevel(e.target.value)}
-          className="w-full rounded-md border px-3 py-2"
+          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800"
         >
           <option value="beginner">Beginner</option>
           <option value="intermediate">Intermediate</option>
         </select>
       </div>
 
-      <div className="space-y-2">
-        <p className="font-medium">Preferred Languages</p>
-        <p className="text-xs text-gray-500">GitHub supports many languages. Pick defaults or add your own.</p>
+      <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50/80 p-4">
+        <p className="text-sm font-semibold uppercase tracking-wide text-slate-700">Preferred Languages</p>
+        <p className="text-xs text-gray-600">GitHub supports many languages. Pick defaults or add your own.</p>
         <div className="flex flex-wrap gap-2">
           {LANGUAGE_OPTIONS.map((language) => (
-            <label key={language} className="flex items-center gap-2 rounded border px-3 py-2">
+            <label
+              key={language}
+              className={`flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition ${
+                preferredLanguages.includes(language)
+                  ? "border-indigo-300 bg-indigo-50 text-indigo-800"
+                  : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
+              }`}
+            >
               <input
                 type="checkbox"
                 checked={preferredLanguages.includes(language)}
                 onChange={() => toggleLanguage(language)}
               />
-              <span>{language}</span>
+              <span className="font-medium">{language}</span>
             </label>
           ))}
         </div>
@@ -174,9 +193,13 @@ export default function PreferenceForm() {
             value={customLanguage}
             onChange={(e) => setCustomLanguage(e.target.value)}
             placeholder="Add custom language (e.g. Haskell)"
-            className="w-full rounded-md border px-3 py-2"
+            className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
           />
-          <button type="button" onClick={addCustomLanguage} className="rounded-md border px-3 py-2">
+          <button
+            type="button"
+            onClick={addCustomLanguage}
+            className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+          >
             Add
           </button>
         </div>
@@ -186,7 +209,7 @@ export default function PreferenceForm() {
               key={`selected-language-${language}`}
               type="button"
               onClick={() => toggleLanguage(language)}
-              className="rounded-full border px-2 py-1 text-xs"
+              className="rounded-full border border-indigo-300 bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-800"
             >
               {language} x
             </button>
@@ -194,18 +217,25 @@ export default function PreferenceForm() {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <p className="font-medium">Preferred Areas</p>
-        <p className="text-xs text-gray-500">Use broad areas or add custom label keywords used in GitHub issues.</p>
+      <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50/80 p-4">
+        <p className="text-sm font-semibold uppercase tracking-wide text-slate-700">Preferred Areas</p>
+        <p className="text-xs text-gray-600">Use broad areas or add custom label keywords used in GitHub issues.</p>
         <div className="flex flex-wrap gap-2">
           {CONTRIBUTION_TYPE_OPTIONS.map((area) => (
-            <label key={area.value} className="flex items-center gap-2 rounded border px-3 py-2">
+            <label
+              key={area.value}
+              className={`flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition ${
+                preferredAreas.includes(area.value)
+                  ? "border-indigo-300 bg-indigo-50 text-indigo-800"
+                  : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
+              }`}
+            >
               <input
                 type="checkbox"
                 checked={preferredAreas.includes(area.value)}
                 onChange={() => toggleArea(area.value)}
               />
-              <span>{area.label}</span>
+              <span className="font-medium">{area.label}</span>
             </label>
           ))}
         </div>
@@ -214,9 +244,13 @@ export default function PreferenceForm() {
             value={customArea}
             onChange={(e) => setCustomArea(e.target.value)}
             placeholder="Add custom area/label (e.g. devops, kubernetes)"
-            className="w-full rounded-md border px-3 py-2"
+            className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
           />
-          <button type="button" onClick={addCustomArea} className="rounded-md border px-3 py-2">
+          <button
+            type="button"
+            onClick={addCustomArea}
+            className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+          >
             Add
           </button>
         </div>
@@ -226,7 +260,7 @@ export default function PreferenceForm() {
               key={`selected-area-${area}`}
               type="button"
               onClick={() => toggleArea(area)}
-              className="rounded-full border px-2 py-1 text-xs"
+              className="rounded-full border border-indigo-300 bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-800"
             >
               {area} x
             </button>
@@ -234,9 +268,9 @@ export default function PreferenceForm() {
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2 rounded-lg border border-slate-200 bg-slate-50/80 p-4">
         <div className="flex items-center gap-2">
-          <label className="block font-medium">Preferred Issue Size</label>
+          <label className="block text-sm font-semibold uppercase tracking-wide text-slate-700">Preferred Issue Size</label>
           <button
             type="button"
             onClick={() => setIsIssueSizeInfoOpen(true)}
@@ -250,7 +284,7 @@ export default function PreferenceForm() {
         <select
           value={preferredIssueSize}
           onChange={(e) => setPreferredIssueSize(e.target.value)}
-          className="w-full rounded-md border px-3 py-2"
+          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800"
         >
           <option value="very_small">Very small</option>
           <option value="small">Small</option>
@@ -258,7 +292,7 @@ export default function PreferenceForm() {
         </select>
       </div>
 
-      <label className="flex items-center gap-2">
+      <label className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50/80 p-4 text-sm font-medium text-slate-700">
         <input
           type="checkbox"
           checked={activeReposOnly}
@@ -267,13 +301,15 @@ export default function PreferenceForm() {
         <span>Only show active repositories</span>
       </label>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="rounded-md bg-black px-4 py-2 text-white disabled:opacity-50"
-      >
-        {isSubmitting ? "Saving..." : "Save Preferences"}
-      </button>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="rounded-md bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:opacity-50"
+        >
+          {isSubmitting ? "Saving..." : "Save Preferences"}
+        </button>
+      </div>
 
       <SimpleModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} title="How Matching Works">
         <p>

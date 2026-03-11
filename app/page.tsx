@@ -42,7 +42,7 @@ export default function HomePage() {
 
       <Link
         href="/onboarding"
-        className="inline-block rounded-md bg-black px-6 py-4 text-lg font-semibold text-white transition hover:bg-gray-800"
+        className="inline-block rounded-md bg-black px-16 py-4 text-lg font-semibold text-white transition hover:bg-gray-800"
       >
         Get Started
       </Link>
