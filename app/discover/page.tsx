@@ -819,11 +819,11 @@ export default function DiscoverPage() {
                       {group.issues[0]?.repoDisplayFullName ?? group.repoFullName}
                     </a>
                     {group.issues[0]?.repoDescription ? (
-                      <p className="text-sm leading-6 text-gray-700">{group.issues[0].repoDescription}</p>
+                      <p className="text-sm italic leading-6 text-gray-700">{group.issues[0].repoDescription}</p>
                     ) : null}
                     {(group.issues[0]?.repoTechStack?.length ?? 0) > 0 ? (
                       <div>
-                        <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-blue-700">Tech stack</p>
+                        <p className="mb-1 mt-3 text-xs font-semibold uppercase tracking-wide text-blue-700">Tech stack</p>
                         <div className="flex flex-wrap gap-2">
                           {group.issues[0].repoTechStack?.map((tag) => (
                             <span
@@ -855,13 +855,10 @@ export default function DiscoverPage() {
 
                       return (
                         <>
-                          <p className={`mb-2 text-[11px] font-semibold uppercase tracking-wide ${theme.mutedText}`}>
-                            Top recommendation in this repo
-                          </p>
                           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                             Issue #{issue.issueNumber}
                           </p>
-                          <div className="flex items-start justify-between gap-4">
+                          <div className="mb-2 flex items-start justify-between gap-4">
                             <a
                               href={issue.url}
                               target="_blank"
@@ -884,10 +881,10 @@ export default function DiscoverPage() {
                             </button>
                           </div>
                           <p className="mt-1 text-xs font-medium text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
-                          <p className="mt-2 text-sm leading-6 text-gray-700">{issue.score.explanationText}</p>
+                          <p className="mb-2 mt-2 text-sm leading-6 text-gray-700">{issue.score.explanationText}</p>
 
                           {hasRepoLanguageMatch && issue.repoPrimaryLanguage ? (
-                            <div className="mt-3">
+                            <div className="mt-2">
                               <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-green-700">Matched language</p>
                               <span className="rounded-full border border-green-300 bg-green-50 px-2 py-1 text-xs text-green-700">
                                 {issue.repoPrimaryLanguage}
