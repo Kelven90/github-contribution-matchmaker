@@ -366,6 +366,17 @@ export default function DiscoverPage() {
     [issues]
   );
 
+  const minScoreSliderMax = useMemo(() => {
+    const highestScore = issueMetas.reduce((max, meta) => Math.max(max, meta.issue.score.finalScore), 0);
+    return Math.max(100, Math.ceil(highestScore / 10) * 10);
+  }, [issueMetas]);
+
+  useEffect(() => {
+    if (minScore > minScoreSliderMax) {
+      setMinScore(minScoreSliderMax);
+    }
+  }, [minScore, minScoreSliderMax]);
+
   const filteredMetas = useMemo(
     () =>
       issueMetas.filter((meta) =>
@@ -599,7 +610,7 @@ export default function DiscoverPage() {
 
   return (
     <section className="space-y-6">
-      <div className="space-y-2">
+      <div className="space-y-3 rounded-xl border border-slate-200 bg-gradient-to-r from-sky-50 via-indigo-50 to-purple-50 p-5 shadow-sm">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900">Discover Issues</h1>
         <p className="text-base leading-7 text-gray-600">Beginner-friendly issues matched to your onboarding preferences.</p>
         <div className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-800">
@@ -609,7 +620,7 @@ export default function DiscoverPage() {
 
       {!isLoading && !error && issues.length > 0 ? (
         <>
-          <div className="flex flex-wrap items-end gap-3 rounded-lg border p-4">
+          <div className="flex flex-wrap items-end gap-3 rounded-xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm">
             <label className="space-y-1">
               <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">View</span>
               <select
@@ -644,13 +655,13 @@ export default function DiscoverPage() {
             </p> */}
           </div>
 
-          <div className="grid gap-4 rounded-lg border p-4 md:grid-cols-6">
+          <div className="grid gap-4 rounded-xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm md:grid-cols-6">
             <label className="space-y-2">
               <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">Min score: {minScore}</span>
               <input
                 type="range"
                 min={0}
-                max={100}
+                max={minScoreSliderMax}
                 step={1}
                 value={minScore}
                 onChange={(e) => setMinScore(Number(e.target.value))}
@@ -659,7 +670,7 @@ export default function DiscoverPage() {
             </label>
 
           <label className="space-y-2">
-            <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">Programming language</span>
+            <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">Repo language</span>
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
@@ -1036,7 +1047,11 @@ export default function DiscoverPage() {
         <div className="space-y-2 rounded-md border px-3 py-2 text-sm leading-6">
           <div className="flex items-center justify-between">
             <p>
-              Page {currentPage} / {totalServerPages > MAX_BROWSABLE_PAGES ? `${MAX_BROWSABLE_PAGES}+` : totalServerPages}
+              {activeFilters.length > 0
+                ? `Page ${currentPage}    (Filtered view)`
+                : `Page ${currentPage} / ${
+                    totalServerPages > MAX_BROWSABLE_PAGES ? `${MAX_BROWSABLE_PAGES}+` : totalServerPages
+                  }`}
             </p>
             <div className="flex items-center gap-2">
               <button
@@ -1057,7 +1072,10 @@ export default function DiscoverPage() {
               </button>
             </div>
           </div>
-          <p className="text-xs text-gray-500">Showing top ranked pages for relevance and rate-limit efficiency.</p>
+          <p className="text-xs text-gray-600">
+            {filteredIssues.length} match{filteredIssues.length === 1 ? "" : "es"} on this page with current filters
+          </p>
+          <p className="text-xs text-gray-500">Showing top ranked pages for relevance and rate-limit efficiency</p>
         </div>
       ) : null}
 
