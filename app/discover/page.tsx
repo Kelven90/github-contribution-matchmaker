@@ -58,6 +58,85 @@ const UNKNOWN_LANGUAGE_LABEL = "Unknown";
 const PAGE_SIZE_OPTIONS = DISCOVER_UI.PAGE_SIZE_OPTIONS;
 const MAX_BROWSABLE_PAGES = DISCOVER_UI.MAX_BROWSABLE_PAGES;
 
+type RepoColorTheme = {
+  panel: string;
+  header: string;
+  issueCard: string;
+  details: string;
+  connector: string;
+  mutedText: string;
+  accentText: string;
+  softBadge: string;
+  scoreButton: string;
+};
+
+const REPO_COLOR_THEMES: RepoColorTheme[] = [
+  {
+    panel: "border-sky-300 bg-sky-50/40",
+    header: "border-sky-200 bg-sky-50/70",
+    issueCard: "border-sky-200 bg-white/90",
+    details: "border-sky-200 bg-white/90",
+    connector: "border-sky-300/70",
+    mutedText: "text-sky-700",
+    accentText: "text-sky-900",
+    softBadge: "border-sky-300 bg-sky-100 text-sky-800",
+    scoreButton: "border-sky-300 bg-sky-50 text-sky-900 hover:bg-sky-100",
+  },
+  {
+    panel: "border-violet-300 bg-violet-50/40",
+    header: "border-violet-200 bg-violet-50/70",
+    issueCard: "border-violet-200 bg-white/90",
+    details: "border-violet-200 bg-white/90",
+    connector: "border-violet-300/70",
+    mutedText: "text-violet-700",
+    accentText: "text-violet-900",
+    softBadge: "border-violet-300 bg-violet-100 text-violet-800",
+    scoreButton: "border-violet-300 bg-violet-50 text-violet-900 hover:bg-violet-100",
+  },
+  {
+    panel: "border-emerald-300 bg-emerald-50/40",
+    header: "border-emerald-200 bg-emerald-50/70",
+    issueCard: "border-emerald-200 bg-white/90",
+    details: "border-emerald-200 bg-white/90",
+    connector: "border-emerald-300/70",
+    mutedText: "text-emerald-700",
+    accentText: "text-emerald-900",
+    softBadge: "border-emerald-300 bg-emerald-100 text-emerald-800",
+    scoreButton: "border-emerald-300 bg-emerald-50 text-emerald-900 hover:bg-emerald-100",
+  },
+  {
+    panel: "border-amber-300 bg-amber-50/40",
+    header: "border-amber-200 bg-amber-50/70",
+    issueCard: "border-amber-200 bg-white/90",
+    details: "border-amber-200 bg-white/90",
+    connector: "border-amber-300/70",
+    mutedText: "text-amber-700",
+    accentText: "text-amber-900",
+    softBadge: "border-amber-300 bg-amber-100 text-amber-800",
+    scoreButton: "border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100",
+  },
+  {
+    panel: "border-rose-300 bg-rose-50/40",
+    header: "border-rose-200 bg-rose-50/70",
+    issueCard: "border-rose-200 bg-white/90",
+    details: "border-rose-200 bg-white/90",
+    connector: "border-rose-300/70",
+    mutedText: "text-rose-700",
+    accentText: "text-rose-900",
+    softBadge: "border-rose-300 bg-rose-100 text-rose-800",
+    scoreButton: "border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100",
+  },
+];
+
+function getRepoColorTheme(repoFullName: string): RepoColorTheme {
+  let hash = 0;
+  for (let i = 0; i < repoFullName.length; i += 1) {
+    hash = (hash << 5) - hash + repoFullName.charCodeAt(i);
+    hash |= 0;
+  }
+  return REPO_COLOR_THEMES[Math.abs(hash) % REPO_COLOR_THEMES.length];
+}
+
 type IssueFilterCriteria = {
   minScore?: number;
   selectedLanguage?: string;
@@ -517,9 +596,9 @@ export default function DiscoverPage() {
   return (
     <section className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold">Discover Issues</h1>
-        <p className="text-gray-600">Beginner-friendly issues matched to your onboarding preferences.</p>
-        <div className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Discover Issues</h1>
+        <p className="text-base leading-7 text-gray-600">Beginner-friendly issues matched to your onboarding preferences.</p>
+        <div className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-800">
           Disclaimer: Please review repository and issue details before cloning or running code, and use your usual development safety practices.
         </div>
       </div>
@@ -528,22 +607,22 @@ export default function DiscoverPage() {
         <>
           <div className="flex flex-wrap items-end gap-3 rounded-lg border p-4">
             <label className="space-y-1">
-              <span className="block text-sm font-medium">View</span>
+              <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">View</span>
               <select
                 value={viewMode}
                 onChange={(e) => setViewMode(e.target.value as ViewMode)}
-                className="rounded-md border px-3 py-2 text-sm"
+                className="rounded-md border px-3 py-2 text-sm font-medium"
               >
                 <option value="panel">Panel (grouped by repo)</option>
                 <option value="list">List (flat issues)</option>
               </select>
             </label>
             <label className="space-y-1">
-              <span className="block text-sm font-medium">Items per page</span>
+              <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">Items per page</span>
               <select
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
-                className="rounded-md border px-3 py-2 text-sm"
+                className="rounded-md border px-3 py-2 text-sm font-medium"
               >
                 {PAGE_SIZE_OPTIONS.map((value) => (
                   <option key={value} value={value}>
@@ -563,7 +642,7 @@ export default function DiscoverPage() {
 
           <div className="grid gap-4 rounded-lg border p-4 md:grid-cols-6">
             <label className="space-y-2">
-              <span className="block text-sm font-medium">Min score: {minScore}</span>
+              <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">Min score: {minScore}</span>
               <input
                 type="range"
                 min={0}
@@ -576,11 +655,11 @@ export default function DiscoverPage() {
             </label>
 
           <label className="space-y-2">
-            <span className="block text-sm font-medium">Programming language</span>
+            <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">Programming language</span>
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm"
+              className="w-full rounded-md border px-3 py-2 text-sm font-medium"
             >
               <option value="all">All languages ({languageFacet.allCount})</option>
               {selectedLanguage !== "all" && !languageFacet.options.some((option) => option.value === selectedLanguage) ? (
@@ -597,11 +676,11 @@ export default function DiscoverPage() {
           </label>
 
           <label className="space-y-2">
-            <span className="block text-sm font-medium">Content language</span>
+            <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">Content language</span>
             <select
               value={selectedContentLanguage}
               onChange={(e) => setSelectedContentLanguage(e.target.value as ContentLanguageOption)}
-              className="w-full rounded-md border px-3 py-2 text-sm"
+              className="w-full rounded-md border px-3 py-2 text-sm font-medium"
             >
               <option value="all">All ({contentFacet.allCount})</option>
               <option value="english">English ({contentFacet.english})</option>
@@ -610,11 +689,11 @@ export default function DiscoverPage() {
           </label>
 
           <label className="space-y-2">
-            <span className="block text-sm font-medium">Area</span>
+            <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">Area</span>
             <select
               value={selectedArea}
               onChange={(e) => setSelectedArea(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm"
+              className="w-full rounded-md border px-3 py-2 text-sm font-medium"
             >
               <option value="all">All areas ({areaFacet.allCount})</option>
               {selectedArea !== "all" && !areaFacet.options.some((option) => option.value === selectedArea) ? (
@@ -629,11 +708,11 @@ export default function DiscoverPage() {
           </label>
 
           <label className="space-y-2">
-            <span className="block text-sm font-medium">Label</span>
+            <span className="block text-xs font-semibold uppercase tracking-wide text-gray-600">Label</span>
             <select
               value={selectedLabel}
               onChange={(e) => setSelectedLabel(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm"
+              className="w-full rounded-md border px-3 py-2 text-sm font-medium"
             >
               <option value="all">All labels ({labelFacet.allCount})</option>
               {selectedLabel !== "all" && !labelFacet.options.some((option) => option.value === selectedLabel) ? (
@@ -653,7 +732,7 @@ export default function DiscoverPage() {
               checked={hidePenalized}
               onChange={(e) => setHidePenalized(e.target.checked)}
             />
-            <span className="text-sm">Hide penalized issues</span>
+            <span className="text-sm font-semibold text-gray-800">Hide penalized issues</span>
             <button
               type="button"
               onClick={() => setIsPenaltyInfoOpen(true)}
@@ -668,7 +747,7 @@ export default function DiscoverPage() {
             <button
               type="button"
               onClick={resetFilters}
-              className="self-end rounded-md border px-3 py-2 text-sm font-medium transition hover:bg-gray-50"
+              className="self-end rounded-md border px-3 py-2 text-sm font-semibold transition hover:bg-gray-50"
             >
               Reset filters
             </button>
@@ -695,7 +774,7 @@ export default function DiscoverPage() {
       ) : null}
 
       {!isLoading && !error && issues.length > 0 && filteredIssues.length === 0 ? (
-        <div className="space-y-1 text-gray-600">
+        <div className="space-y-1 text-sm leading-6 text-gray-600">
           <p>
             No issues match the current filters
             {activeFilters.length > 0 ? ` (${activeFilters.join(", ")})` : ""}. Try resetting filters or lowering min
@@ -708,31 +787,33 @@ export default function DiscoverPage() {
       {!isLoading && !error && filteredIssues.length > 0 ? (
         viewMode === "panel" ? (
         <ul className="space-y-4">
-          {visiblePanelGroups.map((group) => (
-            <li key={group.repoFullName} className="rounded-lg border p-4">
-              <div className="mb-3 rounded-md border bg-gray-50 p-3">
+          {visiblePanelGroups.map((group) => {
+            const theme = getRepoColorTheme(group.repoFullName);
+            return (
+            <li key={group.repoFullName} className={`rounded-lg border p-4 ${theme.panel}`}>
+              <div className={`mb-3 rounded-md border p-3 ${theme.header}`}>
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-2">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Repository</p>
+                    <p className={`text-xs font-semibold uppercase tracking-wide ${theme.mutedText}`}>Repository</p>
                     <a
                       href={group.issues[0]?.repoHomepageUrl ?? group.issues[0]?.repoUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-base font-semibold text-gray-900 hover:underline"
+                      className={`text-lg font-bold leading-7 hover:underline ${theme.accentText}`}
                     >
                       {group.issues[0]?.repoDisplayFullName ?? group.repoFullName}
                     </a>
                     {group.issues[0]?.repoDescription ? (
-                      <p className="text-sm text-gray-700">{group.issues[0].repoDescription}</p>
+                      <p className="text-sm leading-6 text-gray-700">{group.issues[0].repoDescription}</p>
                     ) : null}
                     {(group.issues[0]?.repoTechStack?.length ?? 0) > 0 ? (
                       <div>
-                        <p className="mb-1 text-xs font-medium text-blue-700">Tech stack</p>
+                        <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-blue-700">Tech stack</p>
                         <div className="flex flex-wrap gap-2">
                           {group.issues[0].repoTechStack?.map((tag) => (
                             <span
                               key={`${group.repoFullName}-stack-${tag}`}
-                              className="rounded-full border border-blue-300 bg-blue-50 px-2 py-1 text-xs text-blue-700"
+                              className={`rounded-full border px-2 py-1 text-xs ${theme.softBadge}`}
                             >
                               {tag}
                             </span>
@@ -741,15 +822,15 @@ export default function DiscoverPage() {
                       </div>
                     ) : null}
                   </div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs font-medium text-gray-500">
                     {group.issues.length} recommendation{group.issues.length > 1 ? "s" : ""}
                   </span>
                 </div>
               </div>
 
-              <div className="space-y-4">
+              <div className={`ml-2 space-y-4 border-l-4 pl-4 ${theme.connector}`}>
                 {group.issues.slice(0, 1).map((issue) => (
-                  <article key={issue.githubIssueId} className="rounded-md border p-3">
+                  <article key={issue.githubIssueId} className={`rounded-md border p-3 ${theme.issueCard}`}>
                     {(() => {
                       const { matchedLabels, otherLabels, hasRepoLanguageMatch, inferredAreaMatches } = getLabelMatches(
                         issue,
@@ -758,6 +839,9 @@ export default function DiscoverPage() {
 
                       return (
                         <>
+                          <p className={`mb-2 text-[11px] font-semibold uppercase tracking-wide ${theme.mutedText}`}>
+                            Top recommendation in this repo
+                          </p>
                           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                             Issue #{issue.issueNumber}
                           </p>
@@ -766,26 +850,26 @@ export default function DiscoverPage() {
                               href={issue.url}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-lg font-semibold hover:underline"
+                              className="text-lg font-bold leading-7 text-gray-900 hover:underline"
                             >
                               {issue.title}
                             </a>
                             <button
                               type="button"
                               onClick={() => setSelectedIssue(issue)}
-                              className="shrink-0 rounded-full border bg-gray-50 px-3 py-1 text-sm font-semibold transition hover:bg-gray-100"
+                              className={`shrink-0 rounded-full border px-3 py-1 text-sm font-semibold transition ${theme.scoreButton}`}
                               title="Click to see score breakdown"
                               aria-label={`Open score details for ${issue.title}`}
                             >
                               Score {issue.score.finalScore} (details)
                             </button>
                           </div>
-                          <p className="mt-1 text-xs text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
-                          <p className="mt-2 text-sm text-gray-700">{issue.score.explanationText}</p>
+                          <p className="mt-1 text-xs font-medium text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
+                          <p className="mt-2 text-sm leading-6 text-gray-700">{issue.score.explanationText}</p>
 
                           {hasRepoLanguageMatch && issue.repoPrimaryLanguage ? (
                             <div className="mt-3">
-                              <p className="mb-1 text-xs font-medium text-green-700">Matched language</p>
+                              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-green-700">Matched language</p>
                               <span className="rounded-full border border-green-300 bg-green-50 px-2 py-1 text-xs text-green-700">
                                 {issue.repoPrimaryLanguage}
                               </span>
@@ -794,7 +878,7 @@ export default function DiscoverPage() {
 
                           {matchedLabels.length > 0 ? (
                             <div className="mt-3">
-                              <p className="mb-1 text-xs font-medium text-green-700">Matched labels</p>
+                              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-green-700">Matched labels</p>
                               <div className="flex flex-wrap gap-2">
                                 {matchedLabels.map((label) => (
                                   <span
@@ -810,7 +894,7 @@ export default function DiscoverPage() {
 
                           {matchedLabels.length === 0 && inferredAreaMatches.length > 0 ? (
                             <div className="mt-3">
-                              <p className="mb-1 text-xs font-medium text-amber-700">
+                              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-700">
                                 Inferred area matches (from title/body)
                               </p>
                               <div className="flex flex-wrap gap-2">
@@ -828,7 +912,7 @@ export default function DiscoverPage() {
 
                           {otherLabels.length > 0 ? (
                             <div className="mt-3">
-                              <p className="mb-1 text-xs font-medium text-gray-600">Other repo labels</p>
+                              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-600">Other repo labels</p>
                               <div className="flex flex-wrap gap-2">
                                 {otherLabels.map((label) => (
                                   <span
@@ -848,13 +932,16 @@ export default function DiscoverPage() {
                 ))}
 
                 {group.issues.length > 1 ? (
-                  <details className="rounded-md border p-3">
-                    <summary className="cursor-pointer text-sm font-medium text-gray-700">
+                  <details className={`rounded-md border p-3 ${theme.details}`}>
+                    <summary className="cursor-pointer text-sm font-semibold text-gray-800">
                       View {group.issues.length - 1} more issue{group.issues.length - 1 > 1 ? "s" : ""} from this repo
                     </summary>
+                    <p className={`mt-2 text-[11px] font-medium uppercase tracking-wide ${theme.mutedText}`}>
+                      Additional repo issues
+                    </p>
                     <ul className="mt-3 space-y-3">
                       {group.issues.slice(1).map((issue) => (
-                        <li key={issue.githubIssueId} className="rounded-md border p-3">
+                        <li key={issue.githubIssueId} className={`rounded-md border p-3 ${theme.issueCard}`}>
                           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                             Issue #{issue.issueNumber}
                           </p>
@@ -863,21 +950,21 @@ export default function DiscoverPage() {
                               href={issue.url}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-sm font-semibold hover:underline"
+                              className="text-base font-semibold leading-6 text-gray-900 hover:underline"
                             >
                               {issue.title}
                             </a>
                             <button
                               type="button"
                               onClick={() => setSelectedIssue(issue)}
-                              className="shrink-0 rounded-full border bg-gray-50 px-2 py-1 text-xs font-semibold transition hover:bg-gray-100"
+                              className={`shrink-0 rounded-full border px-2 py-1 text-xs font-semibold transition ${theme.scoreButton}`}
                               title="Click to see score breakdown"
                               aria-label={`Open score details for ${issue.title}`}
                             >
                               Score {issue.score.finalScore}
                             </button>
                           </div>
-                          <p className="mt-1 text-xs text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
+                          <p className="mt-1 text-xs font-medium text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
                         </li>
                       ))}
                     </ul>
@@ -885,39 +972,48 @@ export default function DiscoverPage() {
                 ) : null}
               </div>
             </li>
-          ))}
+            );
+          })}
         </ul>
         ) : (
           <ul className="space-y-3">
-            {visibleListIssues.map((issue) => (
-              <li key={issue.githubIssueId} className="rounded-lg border p-4">
+            {visibleListIssues.map((issue) => {
+              const theme = getRepoColorTheme(issue.repoFullName);
+              return (
+              <li key={issue.githubIssueId} className={`rounded-lg border p-4 ${theme.panel}`}>
                 <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                   {issue.repoDisplayFullName ?? issue.repoFullName} - Issue #{issue.issueNumber}
                 </p>
                 <div className="mt-1 flex items-start justify-between gap-4">
-                  <a href={issue.url} target="_blank" rel="noreferrer" className="text-base font-semibold hover:underline">
+                  <a
+                    href={issue.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-lg font-bold leading-7 text-gray-900 hover:underline"
+                  >
                     {issue.title}
                   </a>
                   <button
                     type="button"
                     onClick={() => setSelectedIssue(issue)}
-                    className="shrink-0 rounded-full border bg-gray-50 px-3 py-1 text-sm font-semibold transition hover:bg-gray-100"
+                    className={`shrink-0 rounded-full border px-3 py-1 text-sm font-semibold transition ${theme.scoreButton}`}
                     title="Click to see score breakdown"
                     aria-label={`Open score details for ${issue.title}`}
                   >
                     Score {issue.score.finalScore}
                   </button>
                 </div>
-                <p className="mt-1 text-xs text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
-                {issue.repoDescription ? <p className="mt-2 text-sm text-gray-700">{issue.repoDescription}</p> : null}
+                <p className="mt-1 text-xs font-medium text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
+                {issue.repoDescription ? <p className="mt-2 text-sm leading-6 text-gray-700">{issue.repoDescription}</p> : null}
               </li>
-            ))}
+              );
+            })}
           </ul>
         )
       ) : null}
 
       {!isLoading && !error && issues.length > 0 ? (
-        <div className="space-y-2 rounded-md border px-3 py-2 text-sm">
+        <div className="space-y-2 rounded-md border px-3 py-2 text-sm leading-6">
           <div className="flex items-center justify-between">
             <p>
               Page {currentPage} / {totalServerPages > MAX_BROWSABLE_PAGES ? `${MAX_BROWSABLE_PAGES}+` : totalServerPages}
