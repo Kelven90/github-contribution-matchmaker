@@ -1,0 +1,6 @@
+export const DISCOVER_UI = {
+  PAGE_SIZE_OPTIONS: [10, 20, 30],
+  DEFAULT_PAGE_SIZE: 20,
+  MAX_BROWSABLE_PAGES: 20,
+  SERVER_PER_PAGE: 50,
+} as const;
