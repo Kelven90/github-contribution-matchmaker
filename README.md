@@ -1,6 +1,65 @@
 # GitHub Contribution Matchmaker
 
-A Next.js + Prisma app that recommends beginner-friendly open-source issues based on onboarding preferences.
+## Problem Statement
+
+Finding a first open-source issue on GitHub is harder than it looks:
+
+- `good first issue` search results are often stale, noisy, or not truly beginner-friendly
+- many issues are already assigned, unclear, or from low-activity repositories
+- GitHub search is powerful, but not personalized to each contributor's skill and goals
+
+This project focuses on a practical question:
+**"Given my current skills and interests, which issue should I try first?"**
+
+## What This Project Does
+
+Instead of returning raw search results, the app:
+
+1. Collects candidate issues from GitHub
+2. Enriches each issue with repository metadata
+3. Scores and ranks each issue with transparent heuristics
+4. Lets users filter results in a UI optimized for discovery
+5. Explains *why* each issue is recommended
+
+## Techniques Used
+
+### 1) Preference-driven retrieval
+
+- Onboarding captures:
+  - skill level
+  - preferred languages
+  - preferred contribution areas
+  - preferred issue size
+  - active-repo preference
+- Query building uses strict + fallback variants to avoid over-narrowing results.
+
+### 2) Rule-based scoring engine (transparent)
+
+Each issue gets a composite score from multiple interpretable signals:
+
+- freshness
+- repository health
+- issue clarity
+- accessibility/newcomer-friendliness
+- tech match
+- skill fit
+- issue size fit
+- penalties (stale / assigned / high discussion overhead)
+
+The UI exposes score details so users can understand recommendations, not just trust a black box.
+
+### 3) Heuristic enrichment
+
+- Label-based area matching with title/body keyword fallback
+- Repository language + tech stack enrichment
+- Faceted filtering on the client from server-provided candidate pages
+
+### 4) Rate-limit-aware GitHub usage
+
+- response caching
+- query complexity guards
+- progressive server-side pagination
+- request shaping to reduce unnecessary API pressure
 
 ## Tech Stack
 
@@ -8,6 +67,14 @@ A Next.js + Prisma app that recommends beginner-friendly open-source issues base
 - Prisma 7 + PostgreSQL
 - Tailwind CSS
 - GitHub REST API
+
+## Architecture (High Level)
+
+- `app/api/issues/search` - search + enrichment + ranking pipeline
+- `lib/github/*` - API client, query builder, response mappers
+- `lib/scoring/*` - scoring modules and aggregate score calculation
+- `components/onboarding/PreferenceForm` - preference capture and persistence
+- `app/discover/page` - filtered, explainable recommendation UI
 
 ## Prerequisites
 
@@ -72,3 +139,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 - Set `DATABASE_URL` and `GITHUB_TOKEN` in your hosting platform.
 - Ensure Prisma client is generated during build (`prebuild` already runs `db:generate`).
+
+## Safety note
+
+This tool recommends repositories/issues, but users should still review code before cloning/running anything locally and follow standard development security practices.
