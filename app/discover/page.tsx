@@ -67,7 +67,6 @@ type RepoColorTheme = {
   mutedText: string;
   accentText: string;
   softBadge: string;
-  scoreButton: string;
 };
 
 const REPO_COLOR_THEMES: RepoColorTheme[] = [
@@ -80,7 +79,6 @@ const REPO_COLOR_THEMES: RepoColorTheme[] = [
     mutedText: "text-sky-700",
     accentText: "text-sky-900",
     softBadge: "border-sky-300 bg-sky-100 text-sky-800",
-    scoreButton: "border-sky-300 bg-sky-50 text-sky-900 hover:bg-sky-100",
   },
   {
     panel: "border-violet-300 bg-violet-50/40",
@@ -91,7 +89,6 @@ const REPO_COLOR_THEMES: RepoColorTheme[] = [
     mutedText: "text-violet-700",
     accentText: "text-violet-900",
     softBadge: "border-violet-300 bg-violet-100 text-violet-800",
-    scoreButton: "border-violet-300 bg-violet-50 text-violet-900 hover:bg-violet-100",
   },
   {
     panel: "border-emerald-300 bg-emerald-50/40",
@@ -102,7 +99,6 @@ const REPO_COLOR_THEMES: RepoColorTheme[] = [
     mutedText: "text-emerald-700",
     accentText: "text-emerald-900",
     softBadge: "border-emerald-300 bg-emerald-100 text-emerald-800",
-    scoreButton: "border-emerald-300 bg-emerald-50 text-emerald-900 hover:bg-emerald-100",
   },
   {
     panel: "border-amber-300 bg-amber-50/40",
@@ -113,7 +109,6 @@ const REPO_COLOR_THEMES: RepoColorTheme[] = [
     mutedText: "text-amber-700",
     accentText: "text-amber-900",
     softBadge: "border-amber-300 bg-amber-100 text-amber-800",
-    scoreButton: "border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100",
   },
   {
     panel: "border-rose-300 bg-rose-50/40",
@@ -124,7 +119,6 @@ const REPO_COLOR_THEMES: RepoColorTheme[] = [
     mutedText: "text-rose-700",
     accentText: "text-rose-900",
     softBadge: "border-rose-300 bg-rose-100 text-rose-800",
-    scoreButton: "border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100",
   },
 ];
 
@@ -135,6 +129,16 @@ function getRepoColorTheme(repoFullName: string): RepoColorTheme {
     hash |= 0;
   }
   return REPO_COLOR_THEMES[Math.abs(hash) % REPO_COLOR_THEMES.length];
+}
+
+function getScoreTone(score: number): { pill: string } {
+  if (score >= 75) {
+    return { pill: "border border-green-300 bg-green-50 text-green-700" };
+  }
+  if (score >= 50) {
+    return { pill: "border border-amber-300 bg-amber-50 text-amber-700" };
+  }
+  return { pill: "border border-red-300 bg-red-50 text-red-700" };
 }
 
 type IssueFilterCriteria = {
@@ -836,6 +840,7 @@ export default function DiscoverPage() {
                         issue,
                         preferences
                       );
+                      const scoreTone = getScoreTone(issue.score.finalScore);
 
                       return (
                         <>
@@ -857,11 +862,14 @@ export default function DiscoverPage() {
                             <button
                               type="button"
                               onClick={() => setSelectedIssue(issue)}
-                              className={`shrink-0 rounded-full border px-3 py-1 text-sm font-semibold transition ${theme.scoreButton}`}
+                              className="shrink-0 rounded-full border border-gray-300 bg-white px-2 py-1 text-sm font-semibold text-gray-800 transition hover:bg-gray-50"
                               title="Click to see score breakdown"
                               aria-label={`Open score details for ${issue.title}`}
                             >
-                              Score {issue.score.finalScore} (details)
+                              <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${scoreTone.pill}`}>
+                                Score {issue.score.finalScore}
+                              </span>{" "}
+                              Details
                             </button>
                           </div>
                           <p className="mt-1 text-xs font-medium text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
@@ -942,6 +950,10 @@ export default function DiscoverPage() {
                     <ul className="mt-3 space-y-3">
                       {group.issues.slice(1).map((issue) => (
                         <li key={issue.githubIssueId} className={`rounded-md border p-3 ${theme.issueCard}`}>
+                          {(() => {
+                            const scoreTone = getScoreTone(issue.score.finalScore);
+                            return (
+                              <>
                           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                             Issue #{issue.issueNumber}
                           </p>
@@ -957,14 +969,19 @@ export default function DiscoverPage() {
                             <button
                               type="button"
                               onClick={() => setSelectedIssue(issue)}
-                              className={`shrink-0 rounded-full border px-2 py-1 text-xs font-semibold transition ${theme.scoreButton}`}
+                              className="shrink-0 rounded-full border border-gray-300 bg-white px-2 py-1 text-xs font-semibold text-gray-800 transition hover:bg-gray-50"
                               title="Click to see score breakdown"
                               aria-label={`Open score details for ${issue.title}`}
                             >
-                              Score {issue.score.finalScore}
+                              <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${scoreTone.pill}`}>
+                                Score {issue.score.finalScore}
+                              </span>
                             </button>
                           </div>
                           <p className="mt-1 text-xs font-medium text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
+                              </>
+                            );
+                          })()}
                         </li>
                       ))}
                     </ul>
@@ -979,6 +996,7 @@ export default function DiscoverPage() {
           <ul className="space-y-3">
             {visibleListIssues.map((issue) => {
               const theme = getRepoColorTheme(issue.repoFullName);
+              const scoreTone = getScoreTone(issue.score.finalScore);
               return (
               <li key={issue.githubIssueId} className={`rounded-lg border p-4 ${theme.panel}`}>
                 <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
@@ -996,11 +1014,13 @@ export default function DiscoverPage() {
                   <button
                     type="button"
                     onClick={() => setSelectedIssue(issue)}
-                    className={`shrink-0 rounded-full border px-3 py-1 text-sm font-semibold transition ${theme.scoreButton}`}
+                    className="shrink-0 rounded-full border border-gray-300 bg-white px-2 py-1 text-sm font-semibold text-gray-800 transition hover:bg-gray-50"
                     title="Click to see score breakdown"
                     aria-label={`Open score details for ${issue.title}`}
                   >
-                    Score {issue.score.finalScore}
+                    <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${scoreTone.pill}`}>
+                      Score {issue.score.finalScore}
+                    </span>
                   </button>
                 </div>
                 <p className="mt-1 text-xs font-medium text-gray-500">Updated {formatDate(issue.updatedAt)}</p>
