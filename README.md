@@ -21,6 +21,50 @@ Instead of returning raw search results, the app:
 4. Lets users filter results in a UI optimized for discovery
 5. Explains *why* each issue is recommended
 
+## Product Walkthrough (Screenshots)
+
+### 1) Landing page
+
+The entry page introduces the value proposition and clearly explains how this differs from raw GitHub search.
+
+![Main page](./public/main_page.png)
+
+### 2) Onboarding flow
+
+Users define matching preferences before searching:
+
+- skill level and issue-size preference
+- preferred languages and contribution areas
+- active repository preference
+- transparency helpers for how scoring is applied
+
+![Onboarding form - preferences](./public/onboarding-1.png)
+![Onboarding form - guide and controls](./public/onboarding-2.png)
+
+### 3) Discover results (grouped by repository)
+
+Results are grouped by repo so users can compare multiple candidate issues within the same project context.
+
+![Discover panel view - grouped by repo](./public/discover-example-1.png)
+![Discover panel view - additional example](./public/discover-example-2.png)
+
+### 4) Faceted filtering experience
+
+The discover page supports interactive filtering without leaving the page:
+
+- min score threshold
+- repo language and content language
+- area and label filters
+- penalized issue toggle
+
+![Discover filters](./public/discover-filters.png)
+
+### 5) Score transparency and explanation
+
+Each issue provides explainable recommendation details so users can understand *why* it was ranked.
+
+![Metric details modal](./public/metric-details.png)
+
 ## Techniques Used
 
 ### 1) Preference-driven retrieval
