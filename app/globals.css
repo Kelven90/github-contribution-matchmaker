@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
 }
 
 @theme inline {
@@ -12,15 +12,85 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root[data-theme="dark"] {
+  --background: #0b1220;
+  --foreground: #e5e7eb;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+:root[data-theme="dark"] .bg-white,
+:root[data-theme="dark"] .bg-white\/90 {
+  background-color: rgb(15 23 42 / 0.95) !important;
+}
+
+:root[data-theme="dark"] .bg-slate-50,
+:root[data-theme="dark"] .bg-slate-50\/80,
+:root[data-theme="dark"] .bg-slate-50\/95,
+:root[data-theme="dark"] .bg-gray-50,
+:root[data-theme="dark"] .bg-gray-50\/80 {
+  background-color: rgb(17 24 39 / 0.92) !important;
+}
+
+:root[data-theme="dark"] .bg-amber-50,
+:root[data-theme="dark"] .bg-amber-50\/40,
+:root[data-theme="dark"] .bg-amber-50\/70,
+:root[data-theme="dark"] .bg-blue-50,
+:root[data-theme="dark"] .bg-blue-50\/70,
+:root[data-theme="dark"] .bg-green-50,
+:root[data-theme="dark"] .bg-rose-50\/40,
+:root[data-theme="dark"] .bg-rose-50\/70,
+:root[data-theme="dark"] .bg-violet-50\/40,
+:root[data-theme="dark"] .bg-violet-50\/70,
+:root[data-theme="dark"] .bg-sky-50\/40,
+:root[data-theme="dark"] .bg-sky-50\/70,
+:root[data-theme="dark"] .bg-emerald-50\/40,
+:root[data-theme="dark"] .bg-emerald-50\/70,
+:root[data-theme="dark"] .bg-indigo-50 {
+  background-color: rgb(30 41 59 / 0.85) !important;
+}
+
+:root[data-theme="dark"] .from-sky-50,
+:root[data-theme="dark"] .via-indigo-50,
+:root[data-theme="dark"] .to-purple-50 {
+  --tw-gradient-from: rgb(30 41 59 / 0.95) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(30 41 59 / 0.95) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), rgb(30 41 59 / 0.95) var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+
+:root[data-theme="dark"] .border-slate-200,
+:root[data-theme="dark"] .border-slate-300,
+:root[data-theme="dark"] .border-gray-200,
+:root[data-theme="dark"] .border-gray-300 {
+  border-color: #334155 !important;
+}
+
+:root[data-theme="dark"] .text-gray-900,
+:root[data-theme="dark"] .text-slate-900,
+:root[data-theme="dark"] .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+:root[data-theme="dark"] .text-gray-700,
+:root[data-theme="dark"] .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+:root[data-theme="dark"] .text-gray-600,
+:root[data-theme="dark"] .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+:root[data-theme="dark"] .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+:root[data-theme="dark"] .hover\:bg-gray-100:hover,
+:root[data-theme="dark"] .hover\:bg-slate-100:hover,
+:root[data-theme="dark"] .hover\:bg-indigo-50:hover {
+  background-color: #1f2937 !important;
 }

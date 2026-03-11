@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ThemeToggle from "@/components/layout/ThemeToggle";
 
 export default function Navbar() {
   return (
@@ -8,13 +9,14 @@ export default function Navbar() {
           GitHub Contribution Matchmaker
         </Link>
 
-        <nav className="flex items-center gap-2 text-md font-medium">
-          <Link href="/onboarding" className="rounded-md px-3 py-1.5 text-gray-1000 transition hover:bg-gray-100 hover:text-gray-900">
+        <nav className="flex items-center gap-2 text-sm font-medium">
+          <Link href="/onboarding" className="rounded-md px-3 py-1.5 text-gray-700 transition hover:bg-gray-100 hover:text-gray-900">
             Onboarding
           </Link>
-          <Link href="/discover" className="rounded-md px-3 py-1.5 text-gray-1000 transition hover:bg-gray-100 hover:text-gray-900">
+          <Link href="/discover" className="rounded-md px-3 py-1.5 text-gray-700 transition hover:bg-gray-100 hover:text-gray-900">
             Discover
           </Link>
+          <ThemeToggle />
         </nav>
       </div>
     </header>
